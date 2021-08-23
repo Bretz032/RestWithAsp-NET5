@@ -8,7 +8,8 @@ using RestWithAsp.Services;
 namespace RestWithAsp.Controllers
 {
     [ApiController]
-    [Route("api/[controller]")]
+    [ApiVersion("1")]
+    [Route("api/[controller]/v{version:apiVersion}")]
     public class PersonController : ControllerBase
     {
 

@@ -63,6 +63,13 @@ namespace RestWithAsp
             //Injeção de dependência
             services.AddScoped<IPersonNegocios, PersonNegociosImplementation>();
 
+            //Injeção de dependência
+
+            services.AddScoped<IBookRepository, BookRepositoryImplementation>();
+
+            //Injeção de dependência
+            services.AddScoped<IBookNegocios, BookNegociosImplementation>();
+
 
         }
 
@@ -100,7 +107,7 @@ namespace RestWithAsp
             catch (Exception ex)
             {
                 Log.Error("Erro na migracao da Database", ex);
-                hrow;
+                throw;
             }
         }
     }

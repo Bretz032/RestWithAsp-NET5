@@ -10,20 +10,20 @@ namespace RestWithAsp.Controllers
     [ApiController]
     [ApiVersion("1")]
     [Route("api/[controller]/v{version:apiVersion}")]
-    public class PersonController : ControllerBase
+    public class BookController : ControllerBase
     {
 
-        private readonly ILogger<PersonController> _logger;
+        private readonly ILogger<BookController> _logger;
 
         // Declaracao do serviço usado
-        private IPersonNegocios _personService;
+        private IBookNegocios _bookService;
 
         // INjecao de uma instância do Serviço de Iperson
         // Ao criar uma instância do controlador de pessoas
-        public PersonController(ILogger<PersonController> logger, IPersonNegocios personService)
+        public BookController(ILogger<BookController> logger, IBookNegocios bookService)
         {
             _logger = logger;
-            _personService = personService;
+            _bookService = bookService;
         }
 
 
@@ -32,42 +32,42 @@ namespace RestWithAsp.Controllers
         {
 
 
-            return Ok(_personService.FindAll());
+            return Ok(_bookService.FindAll());
         }
 
         [HttpGet("{id}")]
         public IActionResult Get(long id)
         {
-            var person = _personService.FindByID(id);
-            if (person == null)
+            var book = _bookService.FindByID(id);
+            if (book == null)
             {
                 return NotFound();
             }
             else
             {
-                return Ok(person);
+                return Ok(book);
 
             }
         }
 
         [HttpPost]
-        public IActionResult Post([FromBody] Person person)
+        public IActionResult Post([FromBody] Book book)
         {
-            if (person == null) return BadRequest();
-            return Ok(_personService.Create(person));
+            if (book == null) return BadRequest();
+            return Ok(_bookService.Create(book));
         }
 
         [HttpPut]
-        public IActionResult Put([FromBody] Person person)
+        public IActionResult Put([FromBody] Book book)
         {
-            if (person == null) return BadRequest();
-            return Ok(_personService.Update(person));
+            if (book == null) return BadRequest();
+            return Ok(_bookService.Update(book));
         }
 
         [HttpDelete("{id}")]
         public IActionResult Delete(long id)
         {
-            _personService.Delete(id);
+            _bookService.Delete(id);
             return NoContent();
         }
 

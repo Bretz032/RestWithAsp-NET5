@@ -1,7 +1,7 @@
 ﻿
 using RestWithAsp.Data.Converter.Contract;
 using RestWithAsp.Model;
-using RestWithASPNETUdemy.Data.VO;
+using RestWithASP.Data.VO;
 using System.Collections.Generic;
 using System.Linq;
 
@@ -14,11 +14,11 @@ namespace RestWithAsp.Data.Converter.Implementations
             if (origin == null) return null;
             return new Book
             {
-                Id = origin.id,
-                author = origin.author,
-                launch_date = origin.launchDate,
-                price = (double)origin.price,
-                title = origin.title
+                Id = origin.Id,
+                author = origin.Author,
+                launch_date = origin.LaunchDate,
+                price = (double)origin.Price,
+                title = origin.Title
             };
         }
 
@@ -27,11 +27,11 @@ namespace RestWithAsp.Data.Converter.Implementations
             if (origin == null) return null;
             return new BookVO
             {
-                id = origin.Id,
-                author = origin.author,
-                launchDate = origin.launch_date,
-                price = (decimal)origin.price,
-                title = origin.title
+                Id = origin.Id,
+                Author = origin.author,
+                LaunchDate = origin.launch_date,
+                Price = (decimal)(double)origin.price,
+                Title = origin.title
             };
         }
 

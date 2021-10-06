@@ -10,7 +10,9 @@ using RestWithAsp.Negocios;
 using RestWithAsp.Negocios.Implementations;
 using RestWithAsp.Repository;
 using RestWithAsp.Repository.Generic;
-using RestWithASPNETUdemy.Model.Context;
+using RestWithASP.Hypermedia.Enricher;
+using RestWithASP.Hypermedia.Filters;
+using RestWithASP.Model.Context;
 using Serilog;
 using System;
 using System.Collections.Generic;
@@ -64,9 +66,17 @@ namespace RestWithAsp
             })
             .AddXmlSerializerFormatters();
 
+            //hypermedia
+            var filterOptions = new HyperMediaFilterOptions();
+            filterOptions.ContentResponseEnricherList.Add(new PersonEnricher());
+            filterOptions.ContentResponseEnricherList.Add(new BookEnricher());
+
+            services.AddSingleton(filterOptions);
+
+
             //Versionamento
             services.AddApiVersioning();
-            //Swagger
+                    //Swagger
             services.AddSwaggerGen(c =>
             {
                 c.SwaggerDoc("v1",
@@ -108,21 +118,20 @@ namespace RestWithAsp
 
             app.UseSwagger();
 
-            app.UseSwaggerUI(c=> {
+            app.UseSwaggerUI(c => {
 
                 c.SwaggerEndpoint("/swagger/v1/swagger.json", "Rest API's From 0 to Azure with ASP.NET Core 5 and Docker - v1");
 
             });
             var options = new RewriteOptions();
-            options.AddRedirect("^$","swagger");
-
-            app.UseRewriter(options);
+            options.AddRedirect("^$", "swagger");
 
             app.UseAuthorization();
 
             app.UseEndpoints(endpoints =>
             {
                 endpoints.MapControllers();
+                endpoints.MapControllerRoute("DefaultApi", "{controller=values}/{id?}");
             });
         }
         private void MigrateDatabase(string connection)

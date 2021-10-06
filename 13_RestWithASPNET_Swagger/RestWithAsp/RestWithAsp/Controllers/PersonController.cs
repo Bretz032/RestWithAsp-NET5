@@ -1,8 +1,8 @@
 ﻿using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Logging;
-using RestWithAsp.Model;
 using RestWithAsp.Negocios;
-using RestWithASPNETUdemy.Data.VO;
+using RestWithASP.Data.VO;
+using RestWithASP.Hypermedia.Filters;
 
 namespace RestWithAsp.Controllers
 {
@@ -27,6 +27,7 @@ namespace RestWithAsp.Controllers
 
 
         [HttpGet]
+        [TypeFilter(typeof(HyperMediaFilter))]
         public IActionResult Get()
         {
 
@@ -35,6 +36,8 @@ namespace RestWithAsp.Controllers
         }
 
         [HttpGet("{id}")]
+        [TypeFilter(typeof(HyperMediaFilter))]
+
         public IActionResult Get(long id)
         {
             var person = _personService.FindByID(id);
@@ -50,6 +53,8 @@ namespace RestWithAsp.Controllers
         }
 
         [HttpPost]
+        [TypeFilter(typeof(HyperMediaFilter))]
+
         public IActionResult Post([FromBody] PersonVO person)
         {
             if (person == null) return BadRequest();
@@ -57,6 +62,8 @@ namespace RestWithAsp.Controllers
         }
 
         [HttpPut]
+        [TypeFilter(typeof(HyperMediaFilter))]
+
         public IActionResult Put([FromBody] PersonVO person)
         {
             if (person == null) return BadRequest();
@@ -64,6 +71,7 @@ namespace RestWithAsp.Controllers
         }
 
         [HttpDelete("{id}")]
+
         public IActionResult Delete(long id)
         {
             _personService.Delete(id);

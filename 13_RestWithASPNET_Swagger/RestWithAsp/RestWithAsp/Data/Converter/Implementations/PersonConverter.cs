@@ -1,11 +1,11 @@
 ﻿
 using RestWithAsp.Data.Converter.Contract;
 using RestWithAsp.Model;
-using RestWithASPNETUdemy.Data.VO;
+using RestWithASP.Data.VO;
 using System.Collections.Generic;
 using System.Linq;
 
-namespace RestWithASPNETUdemy.Data.Converter.Implementations
+namespace RestWithASP.Data.Converter.Implementations
 {
     public class PersonConverter : IParser<PersonVO, Person>, IParser<Person, PersonVO>
     {

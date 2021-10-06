@@ -1,7 +1,7 @@
 ﻿using Microsoft.EntityFrameworkCore;
 using RestWithAsp.Model;
 
-namespace RestWithASPNETUdemy.Model.Context
+namespace RestWithASP.Model.Context
 {
     public class PostgreSQLContext : DbContext
     {

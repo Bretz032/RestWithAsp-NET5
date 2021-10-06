@@ -1,27 +1,24 @@
-﻿ 
+﻿
+ 
+using RestWithASP.Hypermedia;
+using RestWithASP.Hypermedia.Abstract;
 using System.Collections.Generic;
-using System.Text.Json.Serialization;
-
-namespace RestWithASPNETUdemy.Data.VO
+ 
+namespace RestWithASP.Data.VO
 {
-    public class PersonVO 
+    public class PersonVO : ISupportsHyperMedia
     {
-        [JsonPropertyName("id")]
-        public long Id { get; set; }
+         public long Id { get; set; }
 
-        [JsonPropertyName("nome")]
-        public string FirstName { get; set; }
+         public string FirstName { get; set; }
 
-        [JsonPropertyName("sobrenome")]
-        public string LastName { get; set; }
+         public string LastName { get; set; }
 
-        [JsonPropertyName("endereco")]
-        public string Address { get; set; }
+         public string Address { get; set; }
 
-        [JsonPropertyName("genero")]
-        public string Gender { get; set; }
+         public string Gender { get; set; }
 
-      
+        public List<HyperMediaLink> Links { get; set; } = new List<HyperMediaLink>();
 
-     }
+    }
 }

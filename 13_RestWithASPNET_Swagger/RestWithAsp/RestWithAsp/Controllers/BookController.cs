@@ -1,8 +1,8 @@
 ﻿using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Logging;
-using RestWithAsp.Model;
 using RestWithAsp.Negocios;
-using RestWithASPNETUdemy.Data.VO;
+using RestWithASP.Data.VO;
+using RestWithASP.Hypermedia.Filters;
 
 namespace RestWithAsp.Controllers
 {
@@ -27,6 +27,8 @@ namespace RestWithAsp.Controllers
 
 
         [HttpGet]
+        [TypeFilter(typeof(HyperMediaFilter))]
+
         public IActionResult Get()
         {
 
@@ -35,6 +37,8 @@ namespace RestWithAsp.Controllers
         }
 
         [HttpGet("{id}")]
+        [TypeFilter(typeof(HyperMediaFilter))]
+
         public IActionResult Get(long id)
         {
             var book = _bookService.FindByID(id);
@@ -50,6 +54,8 @@ namespace RestWithAsp.Controllers
         }
 
         [HttpPost]
+        [TypeFilter(typeof(HyperMediaFilter))]
+
         public IActionResult Post([FromBody] BookVO book)
         {
             if (book == null) return BadRequest();
@@ -57,6 +63,8 @@ namespace RestWithAsp.Controllers
         }
 
         [HttpPut]
+        [TypeFilter(typeof(HyperMediaFilter))]
+
         public IActionResult Put([FromBody] BookVO book)
         {
             if (book == null) return BadRequest();

@@ -1,12 +1,12 @@
 ﻿using RestWithAsp.Model;
 using System.Collections.Generic;
 using System.Threading;
-using RestWithASPNETUdemy.Model.Context;
+using RestWithASP.Model.Context;
 using System.Linq;
 using System;
 using RestWithAsp.Repository;
-using RestWithASPNETUdemy.Data.Converter.Implementations;
-using RestWithASPNETUdemy.Data.VO;
+using RestWithASP.Data.Converter.Implementations;
+using RestWithASP.Data.VO;
 
 namespace RestWithAsp.Negocios.Implementations
 {

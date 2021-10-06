@@ -1,6 +1,6 @@
 ﻿using Microsoft.EntityFrameworkCore;
 using RestWithAsp.Model.Base;
-using RestWithASPNETUdemy.Model.Context;
+using RestWithASP.Model.Context;
 using System;
 using System.Collections.Generic;
 using System.Linq;

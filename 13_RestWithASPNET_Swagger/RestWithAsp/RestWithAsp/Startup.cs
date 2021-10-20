@@ -1,3 +1,5 @@
+using Microsoft.AspNetCore.Authentication.JwtBearer;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.Rewrite;
@@ -5,17 +7,23 @@ using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
+using Microsoft.Extensions.Options;
+using Microsoft.IdentityModel.Tokens;
 using Microsoft.Net.Http.Headers;
+using RestWithAsp.Configurations;
 using RestWithAsp.Negocios;
 using RestWithAsp.Negocios.Implementations;
 using RestWithAsp.Repository;
 using RestWithAsp.Repository.Generic;
+using RestWithAsp.Services;
+using RestWithAsp.Services.Implementations;
 using RestWithASP.Hypermedia.Enricher;
 using RestWithASP.Hypermedia.Filters;
 using RestWithASP.Model.Context;
 using Serilog;
 using System;
 using System.Collections.Generic;
+using System.Text;
 
 namespace RestWithAsp
 {
@@ -40,6 +48,41 @@ namespace RestWithAsp
         // This method gets called by the runtime. Use this method to add services to the container.
         public void ConfigureServices(IServiceCollection services)
         {
+            //Configuracoes do Token
+            var tokenConfigurations = new TokenConfiguration();
+
+            new ConfigureFromConfigurationOptions<TokenConfiguration>(
+                    Configuration.GetSection("TokenConfigurations")
+                )
+                .Configure(tokenConfigurations);
+
+            services.AddSingleton(tokenConfigurations);
+            services.AddAuthentication(options =>
+            {
+                options.DefaultAuthenticateScheme = JwtBearerDefaults.AuthenticationScheme;
+                options.DefaultChallengeScheme = JwtBearerDefaults.AuthenticationScheme;
+            })
+           .AddJwtBearer(options =>
+           {
+               options.TokenValidationParameters = new TokenValidationParameters
+               {
+                   ValidateIssuer = true,
+                   ValidateAudience = true,
+                   ValidateLifetime = true,
+                   ValidateIssuerSigningKey = true,
+                   ValidIssuer = tokenConfigurations.Issuer,
+                   ValidAudience = tokenConfigurations.Audience,
+                   IssuerSigningKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(tokenConfigurations.Secret))
+               };
+           });
+
+            services.AddAuthorization(auth =>
+            {
+                auth.AddPolicy("Bearer", new AuthorizationPolicyBuilder()
+                    .AddAuthenticationSchemes(JwtBearerDefaults.AuthenticationScheme)
+                    .RequireAuthenticatedUser().Build());
+            });
+
             services.AddCors(options => options.AddDefaultPolicy(builder =>
             {
                 builder.AllowAnyOrigin()
@@ -105,9 +148,18 @@ namespace RestWithAsp
             //Injeção de dependência
             services.AddScoped<IBookNegocios, BookNegociosImplementation>();
 
-            //Injeção de dependência
+            //Injeção de dependência Segurança
+            services.AddScoped<ILoginNegocios, LoginNegociosImplementation>();
 
+            services.AddTransient<ITokenService, TokenService>();
+
+            services.AddScoped<IUserRepository, UserRepository>();
+
+            //Injeção de dependência
             services.AddScoped(typeof(IRepository<>), typeof(GenericRepository<>));
+
+            //Json
+            services.AddControllers().AddNewtonsoftJson();
 
         }
 
@@ -132,8 +184,10 @@ namespace RestWithAsp
                 c.SwaggerEndpoint("/swagger/v1/swagger.json", "Rest API's From 0 to Azure with ASP.NET Core 5 and Docker - v1");
 
             });
-            var options = new RewriteOptions();
-            options.AddRedirect("^$", "swagger");
+
+            var option = new RewriteOptions();
+            option.AddRedirect("^$", "swagger");
+            app.UseRewriter(option);
 
             app.UseAuthorization();
 

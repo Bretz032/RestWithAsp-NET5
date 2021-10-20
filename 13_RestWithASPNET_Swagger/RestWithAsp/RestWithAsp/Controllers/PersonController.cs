@@ -1,4 +1,5 @@
-﻿using Microsoft.AspNetCore.Mvc;
+﻿using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Logging;
 using RestWithAsp.Negocios;
 using RestWithASP.Data.VO;
@@ -28,6 +29,7 @@ namespace RestWithAsp.Controllers
 
 
         [HttpGet]
+        [Authorize("Bearer")]
         [ProducesResponseType((200), Type = typeof(List<PersonVO>))]
         [ProducesResponseType(204)]
         [ProducesResponseType(400)]
